@@ -1,11 +1,11 @@
-import {BsFillStarFill} from 'react-icons/bs'
-import {IoLocationSharp} from 'react-icons/io5'
-import {MdWork} from 'react-icons/md'
+import { BsFillStarFill } from "react-icons/bs";
+import { IoLocationSharp } from "react-icons/io5";
+import { MdWork } from "react-icons/md";
 
-import './index.css'
+import "./index.css";
 
-const SimilarJobItem = props => {
-  const {jobDetails} = props
+const SimilarJobItem = (props) => {
+  const { jobDetails } = props;
   const {
     title,
     companyLogoUrl,
@@ -13,7 +13,7 @@ const SimilarJobItem = props => {
     jobDescription,
     rating,
     location,
-  } = jobDetails
+  } = jobDetails;
   return (
     <li className="similar-jobs-list-item">
       <div>
@@ -47,7 +47,7 @@ const SimilarJobItem = props => {
         </div>
       </div>
     </li>
-  )
-}
+  );
+};
 
-export default SimilarJobItem
+export default SimilarJobItem;

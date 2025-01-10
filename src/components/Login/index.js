@@ -1,57 +1,57 @@
-import {Component} from 'react'
-import {Redirect} from 'react-router-dom'
-import Cookies from 'js-cookie'
+import { Component } from "react";
+import { Redirect } from "react-router-dom";
+import Cookies from "js-cookie";
 
-import './index.css'
+import "./index.css";
 
 class Login extends Component {
   state = {
-    username: '',
-    password: '',
-    errorMsg: '',
+    username: "",
+    password: "",
+    errorMsg: "",
     showErrorMsg: false,
-  }
+  };
 
-  onLogin = event => {
-    event.preventDefault()
-    this.submitLoginDetails()
-  }
+  onLogin = (event) => {
+    event.preventDefault();
+    this.submitLoginDetails();
+  };
 
   submitLoginDetails = async () => {
-    const {history} = this.props
-    const {username, password} = this.state
+    const { history } = this.props;
+    const { username, password } = this.state;
 
-    const userDetails = {username, password}
-    const url = 'https://apis.ccbp.in/login'
+    const userDetails = { username, password };
+    const url = "https://apis.ccbp.in/login";
     const options = {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(userDetails),
-    }
-    const response = await fetch(url, options)
-    const data = await response.json()
+    };
+    const response = await fetch(url, options);
+    const data = await response.json();
     if (response.ok === true) {
-      const jwtToken = data.jwt_token
-      Cookies.set('jwt_token', jwtToken, {expires: 30})
-      history.replace('/')
+      const jwtToken = data.jwt_token;
+      Cookies.set("jwt_token", jwtToken, { expires: 30 });
+      history.replace("/");
     } else {
-      const errorMsg = data.error_msg
-      this.setState({errorMsg, showErrorMsg: true})
+      const errorMsg = data.error_msg;
+      this.setState({ errorMsg, showErrorMsg: true });
     }
-  }
+  };
 
-  onChangeUsername = event => {
-    this.setState({username: event.target.value})
-  }
+  onChangeUsername = (event) => {
+    this.setState({ username: event.target.value });
+  };
 
-  onChangePassword = event => {
-    this.setState({password: event.target.value})
-  }
+  onChangePassword = (event) => {
+    this.setState({ password: event.target.value });
+  };
 
   render() {
-    const {username, password, errorMsg, showErrorMsg} = this.state
-    const jwtToken = Cookies.get('jwt_token')
+    const { username, password, errorMsg, showErrorMsg } = this.state;
+    const jwtToken = Cookies.get("jwt_token");
     if (jwtToken !== undefined) {
-      return <Redirect to="/" />
+      return <Redirect to="/" />;
     }
     return (
       <div className="login-page-container">
@@ -97,8 +97,8 @@ class Login extends Component {
           </form>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Login
+export default Login;

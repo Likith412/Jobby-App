@@ -1,66 +1,66 @@
-import {Component} from 'react'
-import Cookies from 'js-cookie'
+import { Component } from "react";
+import Cookies from "js-cookie";
 
-import Loader from 'react-loader-spinner'
+import Loader from "react-loader-spinner";
 
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import './index.css'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import "./index.css";
 
 const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
+  initial: "INITIAL",
+  success: "SUCCESS",
+  failure: "FAILURE",
+  inProgress: "IN_PROGRESS",
+};
 
 class Profile extends Component {
   state = {
     profileDetails: {},
     fetchStatus: apiStatusConstants.initial,
-  }
+  };
 
   componentDidMount() {
-    this.getProfile()
+    this.getProfile();
   }
 
   onClickRetry = () => {
-    this.getProfile()
-  }
+    this.getProfile();
+  };
 
   getProfile = async () => {
-    this.setState({fetchStatus: apiStatusConstants.inProgress})
-    const jwtToken = Cookies.get('jwt_token')
-    const url = 'https://apis.ccbp.in/profile'
+    this.setState({ fetchStatus: apiStatusConstants.inProgress });
+    const jwtToken = Cookies.get("jwt_token");
+    const url = "https://apis.ccbp.in/profile";
     const options = {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
-    }
+    };
 
-    const response = await fetch(url, options)
+    const response = await fetch(url, options);
     if (response.ok === true) {
-      const data = await response.json()
-      const profileDetails = data.profile_details
+      const data = await response.json();
+      const profileDetails = data.profile_details;
       const formattedProfileDetails = {
         name: profileDetails.name,
         profileImageUrl: profileDetails.profile_image_url,
         shortBio: profileDetails.short_bio,
-      }
+      };
       this.setState({
         profileDetails: formattedProfileDetails,
         fetchStatus: apiStatusConstants.success,
-      })
+      });
     } else {
       this.setState({
         fetchStatus: apiStatusConstants.failure,
-      })
+      });
     }
-  }
+  };
 
   renderSuccessView = () => {
-    const {profileDetails} = this.state
-    const {name = '', profileImageUrl = '', shortBio = ''} = profileDetails
+    const { profileDetails } = this.state;
+    const { name = "", profileImageUrl = "", shortBio = "" } = profileDetails;
     return (
       <>
         <div className="profile-container">
@@ -70,8 +70,8 @@ class Profile extends Component {
         </div>
         <hr className="profile-seperator" />
       </>
-    )
-  }
+    );
+  };
 
   renderFailureView = () => (
     <div className="profile-failure-view-container">
@@ -83,27 +83,27 @@ class Profile extends Component {
         Retry
       </button>
     </div>
-  )
+  );
 
   renderInProgressView = () => (
     <div className="profile-loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
     </div>
-  )
+  );
 
   render() {
-    const {fetchStatus} = this.state
+    const { fetchStatus } = this.state;
     switch (fetchStatus) {
       case apiStatusConstants.success:
-        return this.renderSuccessView()
+        return this.renderSuccessView();
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return this.renderFailureView();
       case apiStatusConstants.inProgress:
-        return this.renderInProgressView()
+        return this.renderInProgressView();
       default:
-        return null
+        return null;
     }
   }
 }
 
-export default Profile
+export default Profile;

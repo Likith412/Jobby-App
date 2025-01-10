@@ -1,99 +1,100 @@
-import {Component} from 'react'
-import Cookies from 'js-cookie'
-import Loader from 'react-loader-spinner'
+import { Component } from "react";
+import Cookies from "js-cookie";
+import Loader from "react-loader-spinner";
 
-import {BsSearch} from 'react-icons/bs'
-import Header from '../Header'
-import Profile from '../Profile'
-import JobItem from '../JobItem'
-import FiltersGroup from '../FiltersGroup'
-import FailureView from '../FailureView'
+import { BsSearch } from "react-icons/bs";
+import Header from "../Header";
+import Profile from "../Profile";
+import JobItem from "../JobItem";
+import FiltersGroup from "../FiltersGroup";
+import FailureView from "../FailureView";
 
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import './index.css'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import "./index.css";
 
 const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
+  initial: "INITIAL",
+  success: "SUCCESS",
+  failure: "FAILURE",
+  inProgress: "IN_PROGRESS",
+};
 
 class Jobs extends Component {
   state = {
     jobsList: [],
     employmentTypeSelectedList: [],
-    minimumPackage: '',
-    searchInput: '',
+    minimumPackage: "",
+    searchInput: "",
     fetchStatus: apiStatusConstants.initial,
-  }
+  };
 
   componentDidMount() {
-    this.getJobsList()
+    this.getJobsList();
   }
 
-  addEmploymentType = id => {
-    const {employmentTypeSelectedList} = this.state
+  addEmploymentType = (id) => {
+    const { employmentTypeSelectedList } = this.state;
     this.setState(
       {
         employmentTypeSelectedList: [...employmentTypeSelectedList, id],
       },
-      this.getJobsList,
-    )
-  }
+      this.getJobsList
+    );
+  };
 
-  removeEmploymentType = id => {
-    const {employmentTypeSelectedList} = this.state
+  removeEmploymentType = (id) => {
+    const { employmentTypeSelectedList } = this.state;
     const filteredList = employmentTypeSelectedList.filter(
-      eachItem => eachItem !== id,
-    )
+      (eachItem) => eachItem !== id
+    );
     this.setState(
       {
         employmentTypeSelectedList: filteredList,
       },
-      this.getJobsList,
-    )
-  }
+      this.getJobsList
+    );
+  };
 
-  changeMinimumPackage = id => {
+  changeMinimumPackage = (id) => {
     this.setState(
       {
         minimumPackage: id,
       },
-      this.getJobsList,
-    )
-  }
+      this.getJobsList
+    );
+  };
 
-  onChangeSearchInput = event => {
+  onChangeSearchInput = (event) => {
     this.setState({
       searchInput: event.target.value,
-    })
-  }
+    });
+  };
 
   onClickSearch = () => {
-    this.getJobsList()
-  }
+    this.getJobsList();
+  };
 
   getJobsList = async () => {
     this.setState({
       fetchStatus: apiStatusConstants.inProgress,
-    })
-    const {employmentTypeSelectedList, minimumPackage, searchInput} = this.state
-    const employmentType = employmentTypeSelectedList.join(',')
-    const jwtToken = Cookies.get('jwt_token')
-    const url = `https://apis.ccbp.in/jobs?employment_type=${employmentType}&minimum_package=${minimumPackage}&search=${searchInput}`
+    });
+    const { employmentTypeSelectedList, minimumPackage, searchInput } =
+      this.state;
+    const employmentType = employmentTypeSelectedList.join(",");
+    const jwtToken = Cookies.get("jwt_token");
+    const url = `https://apis.ccbp.in/jobs?employment_type=${employmentType}&minimum_package=${minimumPackage}&search=${searchInput}`;
     const options = {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
-    }
+    };
 
-    const response = await fetch(url, options)
+    const response = await fetch(url, options);
     if (response.ok === true) {
-      const data = await response.json()
-      const jobsList = data.jobs
-      const formattedJobsList = jobsList.map(eachItem => ({
+      const data = await response.json();
+      const jobsList = data.jobs;
+      const formattedJobsList = jobsList.map((eachItem) => ({
         id: eachItem.id,
         companyLogoUrl: eachItem.company_logo_url,
         title: eachItem.title,
@@ -102,21 +103,21 @@ class Jobs extends Component {
         employmentType: eachItem.employment_type,
         packagePerAnnum: eachItem.package_per_annum,
         jobDescription: eachItem.job_description,
-      }))
+      }));
 
       this.setState({
         jobsList: formattedJobsList,
         fetchStatus: apiStatusConstants.success,
-      })
+      });
     } else {
       this.setState({
         fetchStatus: apiStatusConstants.failure,
-      })
+      });
     }
-  }
+  };
 
   renderSuccessView = () => {
-    const {jobsList} = this.state
+    const { jobsList } = this.state;
     if (jobsList.length === 0) {
       return (
         <div className="no-jobs-container">
@@ -130,41 +131,41 @@ class Jobs extends Component {
             We could not find any jobs. Try other filters.
           </p>
         </div>
-      )
+      );
     }
     return (
       <ul className="jobs-list-container">
-        {jobsList.map(eachItem => (
+        {jobsList.map((eachItem) => (
           <JobItem jobDetails={eachItem} key={eachItem.id} />
         ))}
       </ul>
-    )
-  }
+    );
+  };
 
-  renderFailureView = () => <FailureView onClickRetry={this.getJobsList} />
+  renderFailureView = () => <FailureView onClickRetry={this.getJobsList} />;
 
   renderInProgressView = () => (
     <div className="loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
     </div>
-  )
+  );
 
   renderView = () => {
-    const {fetchStatus} = this.state
+    const { fetchStatus } = this.state;
     switch (fetchStatus) {
       case apiStatusConstants.success:
-        return this.renderSuccessView()
+        return this.renderSuccessView();
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return this.renderFailureView();
       case apiStatusConstants.inProgress:
-        return this.renderInProgressView()
+        return this.renderInProgressView();
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   render() {
-    const {searchInput} = this.state
+    const { searchInput } = this.state;
     return (
       <>
         <Header />
@@ -217,8 +218,8 @@ class Jobs extends Component {
           </div>
         </div>
       </>
-    )
+    );
   }
 }
 
-export default Jobs
+export default Jobs;

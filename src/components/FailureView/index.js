@@ -1,7 +1,7 @@
-import './index.css'
+import "./index.css";
 
-const FailureView = props => {
-  const {onClickRetry} = props
+const FailureView = (props) => {
+  const { onClickRetry } = props;
   return (
     <div className="failure-view-container">
       <img
@@ -17,7 +17,7 @@ const FailureView = props => {
         Retry
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default FailureView
+export default FailureView;

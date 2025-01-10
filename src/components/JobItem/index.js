@@ -1,12 +1,12 @@
-import {Link} from 'react-router-dom'
-import {BsFillStarFill} from 'react-icons/bs'
-import {IoLocationSharp} from 'react-icons/io5'
-import {MdWork} from 'react-icons/md'
+import { Link } from "react-router-dom";
+import { BsFillStarFill } from "react-icons/bs";
+import { IoLocationSharp } from "react-icons/io5";
+import { MdWork } from "react-icons/md";
 
-import './index.css'
+import "./index.css";
 
-const JobItem = props => {
-  const {jobDetails} = props
+const JobItem = (props) => {
+  const { jobDetails } = props;
   const {
     id,
     companyLogoUrl,
@@ -16,7 +16,7 @@ const JobItem = props => {
     employmentType,
     packagePerAnnum,
     jobDescription,
-  } = jobDetails
+  } = jobDetails;
 
   return (
     <li className="jobs-list-item">
@@ -53,6 +53,6 @@ const JobItem = props => {
         <p className="job-description-text">{jobDescription}</p>
       </Link>
     </li>
-  )
-}
-export default JobItem
+  );
+};
+export default JobItem;

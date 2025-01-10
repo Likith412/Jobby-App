@@ -1,18 +1,18 @@
-import {Link, withRouter} from 'react-router-dom'
-import Cookies from 'js-cookie'
+import { Link, withRouter } from "react-router-dom";
+import Cookies from "js-cookie";
 
-import {AiFillHome} from 'react-icons/ai'
-import {MdWork} from 'react-icons/md'
-import {FiLogOut} from 'react-icons/fi'
+import { AiFillHome } from "react-icons/ai";
+import { MdWork } from "react-icons/md";
+import { FiLogOut } from "react-icons/fi";
 
-import './index.css'
+import "./index.css";
 
-const Header = props => {
+const Header = (props) => {
   const onClickLogout = () => {
-    const {history} = props
-    Cookies.remove('jwt_token')
-    history.replace('/login')
-  }
+    const { history } = props;
+    Cookies.remove("jwt_token");
+    history.replace("/login");
+  };
 
   return (
     <nav className="navbar">
@@ -66,7 +66,7 @@ const Header = props => {
         </button>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default withRouter(Header)
+export default withRouter(Header);
